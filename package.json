@@ -1,0 +1,40 @@
+{
+  "name": "nextproject",
+  "version": "0.1.0",
+  "private": true,
+  "scripts": {
+    "dev": "next dev",
+    "build": "next build",
+    "start": "next start",
+    "lint": "next lint"
+  },
+  "dependencies": {
+    "@emotion/react": "^11.11.1",
+    "@emotion/styled": "^11.11.0",
+    "@mui/icons-material": "^5.15.0",
+    "@mui/lab": "^5.0.0-alpha.156",
+    "@mui/material": "^5.14.13",
+    "@mui/x-data-grid": "^6.18.2",
+    "@mui/x-date-pickers": "^6.18.5",
+    "@types/node": "20.8.4",
+    "@types/nodemailer": "^6.4.14",
+    "@types/react": "18.2.28",
+    "@types/react-dom": "18.2.13",
+    "axios": "^1.6.2",
+    "chart.js": "^4.4.1",
+    "date-fns": "^2.30.0",
+    "dayjs": "^1.11.10",
+    "eslint": "8.51.0",
+    "eslint-config-next": "13.5.4",
+    "firebase": "^10.5.0",
+    "html2pdf.js": "^0.10.1",
+    "jspdf": "^2.5.1",
+    "next": "13.5.4",
+    "nodemailer": "^6.9.7",
+    "react": "18.2.0",
+    "react-chartjs-2": "^5.2.0",
+    "react-dom": "18.2.0",
+    "short-uuid": "^4.2.2",
+    "typescript": "5.2.2"
+  }
+}
