@@ -57,7 +57,7 @@ function useProducts() {
 
       querySnapshot.forEach((doc) => {
         data.push({
-          id: doc.data().id,
+          id: doc.id,
           userId: doc.data().userId,
           userName: doc.data().userName,
           date: doc.data().date,
@@ -67,9 +67,13 @@ function useProducts() {
           equipmentCategory: doc.data().equipmentCategory,
           equipmentQuantity: doc.data().equipmentQuantity,
         });
-        console.log(`${doc.id} => ${doc.data()}`);
+        // console.log(`${doc.id} => ${doc.data()}`);
       });
-      setProducts(() => [...data]);
+      let list2 = data.map(item => ({
+        ...item,
+        returnTime: item.returnTime === "" ? "未歸還" : item.returnTime
+      }))
+      setProducts(() => [...list2]);
       setIsLoading(false);
     }
     fetchData();

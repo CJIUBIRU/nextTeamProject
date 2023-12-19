@@ -18,24 +18,28 @@ import UseProduct from "./useHistory";
 import { Product } from "../_settings/interfaces";
 
 export default function Home() {
-  const [products, addProduct, deleteProduct, updateProduct, isLoading] =
-    UseProduct();
+  const [products, addProduct, deleteProduct, updateProduct, isLoading] = UseProduct();
+  // console.log(products);
+
 
   const [searchText, setSearchText] = useState("");
 
-  const rows = products.map((product) => ({
-    id: product.id,
-    userId: product.userId,
-    userName: product.userName,
-    equipmentCategory: product.equipmentCategory,
-    equipmentQuantity: product.equipmentQuantity,
-    period: product.period,
-    date: product.date,
-    rentTime: product.rentTime,
-    returnTime: product.returnTime === "" ? "未歸還" : product.returnTime,
-  }));
+  // const rows = products.map((product) => ({
+  //   id: product.id,
+  //   userId: product.userId,
+  //   userName: product.userName,
+  //   equipmentCategory: product.equipmentCategory,
+  //   equipmentQuantity: product.equipmentQuantity,
+  //   period: product.period,
+  //   date: product.date,
+  //   rentTime: product.rentTime,
+  //   returnTime: product.returnTime === "" ? "未歸還" : product.returnTime,
+  // }));
+
+  const rows = products;
 
   const columns: GridColDef[] = [
+    // { field: "id", headerName: "userId" },
     { field: "userId", headerName: "教職員編號/學號", width: 180 },
     { field: "userName", headerName: "姓名", width: 150 },
     { field: "equipmentCategory", headerName: "器材種類", width: 130 },
@@ -75,22 +79,22 @@ export default function Home() {
     },
   ];
 
-  const handleSearchChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    setSearchText(event.target.value);
-  };
+  // const handleSearchChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+  //   setSearchText(event.target.value);
+  // };
 
-  const filteredRows = rows
-  .filter((row) =>
-    Object.values(row).some(
-      (value) =>
-        typeof value === "string" &&
-        value.toLowerCase().includes(searchText.toLowerCase())
-    )
-  )
-  .map((row) => ({
-    ...row,
-    id: row.userId.toString(),
-  }));
+  // const filteredRows = rows
+  // .filter((row) =>
+  //   Object.values(row).some(
+  //     (value) =>
+  //       typeof value === "string" &&
+  //       value.toLowerCase().includes(searchText.toLowerCase())
+  //   )
+  // )
+  // .map((row) => ({
+  //   ...row,
+  //   id: row.userId.toString(),
+  // }));
 
 
   const CustomToolbar = () => (
@@ -101,26 +105,29 @@ export default function Home() {
 
   const theme = createTheme(
     {
-        palette: {
-            primary: { main: '#1976d2' },
-        },
+      palette: {
+        primary: { main: '#1976d2' },
+      },
     },
     zhTW,
-);
+  );
 
   return (
     <Container>
       <div style={{ height: 500, width: "100%", marginTop: "30px" }}>
-      <ThemeProvider theme={theme}>
-            <DataGrid
-              rows={filteredRows}
-              columns={columns}
-              checkboxSelection
-              slots={{
-                toolbar: CustomToolbar,
-              }}
-            />
-          </ThemeProvider>
+        <ThemeProvider theme={theme}>
+          <DataGrid
+            rows={rows}
+            columns={columns.map((column) => ({
+              ...column,
+              hide: column.field === "id", // 在這裡判斷是否隱藏 id 欄位
+            }))}
+            // checkboxSelection
+            slots={{
+              toolbar: CustomToolbar,
+            }}
+          />
+        </ThemeProvider>
       </div>
     </Container>
   );

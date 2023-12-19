@@ -25,6 +25,7 @@ import useEquipment from './useEquipment';
 import useRepairment from './useRepairment';
 import { Repair } from "../_settings/interfaces";
 import CheckCircleIcon from '@mui/icons-material/CheckCircle';
+import EquipmentSelectChip from './EquipmentSelectChip';
 
 const theme = createTheme(
     {
@@ -67,6 +68,8 @@ export default function Repairment() {
         submitTime: `${format(newDate, "M/d/yyyy")} ${Timestamp.fromDate(new Date()).toDate().toTimeString().slice(0, 5)}`,
         doneTime: "",
     });
+
+
     console.log("page", repair);
 
     // 器材報修單
@@ -102,42 +105,47 @@ export default function Repairment() {
     }
 
     const handleSubmit = async function (e: React.MouseEvent<HTMLElement>) {
-        if (file) {
-            const imageRef = ref(storage, file.name);
-            await uploadBytes(imageRef, file);
-
-            const starsRef = ref(storage, file.name);
-            const photoURL = await getDownloadURL(starsRef);
-            setRepair((prevRepair) => ({ ...prevRepair, repairPhoto: photoURL }));
-
-            // setStatus(true);
-            addRepair({
-                ...repair,
-                repairPhoto: photoURL,
-            });
-            updateEquipment(repair.equipmentId)
-            updateCategory(repair.equipmentId, repair.equipmentCategory)
-            setMessage(<Alert severity="success">報修成功！</Alert>);
-
-            // Reset data
-            setRepair(prevRepair => ({
-                ...prevRepair,
-                repairmentId: shortUUID.generate(),
-                equipmentId: [''],
-                repairReason: "",
-                repairPhoto: "next.svg",
-                repairStatus: 0,
-                equipmentCategory: '',
-                submitTime: `${format(newDate, "M/d/yyyy")} ${Timestamp.fromDate(new Date()).toDate().toTimeString().slice(0, 5)}`,
-                doneTime: "",
-            }));
-            setEquipmentName([]);
-            setQueryCategory('');
-            setFileInputKey((prevKey) => prevKey === 'fileInputKey' ? 'fileInputKey2' : 'fileInputKey');
-            setStatus(false);
+        if (repair.equipmentId[0] === '' || repair.repairReason === '' || repair.repairPhoto === 'next.svg' || repair.equipmentCategory === '') {
+            setMessage(<Alert severity="error">請完成填寫上述所有欄位，再送出申請</Alert>);
         }
         else {
-            setMessage(<Alert severity="error">報修失敗，請再重新填寫並上傳</Alert>);
+            if (file) {
+                const imageRef = ref(storage, file.name);
+                await uploadBytes(imageRef, file);
+
+                const starsRef = ref(storage, file.name);
+                const photoURL = await getDownloadURL(starsRef);
+                setRepair((prevRepair) => ({ ...prevRepair, repairPhoto: photoURL }));
+
+                // setStatus(true);
+                addRepair({
+                    ...repair,
+                    repairPhoto: photoURL,
+                });
+                updateEquipment(repair.equipmentId)
+                updateCategory(repair.equipmentId, repair.equipmentCategory)
+                setMessage(<Alert severity="success">報修成功！</Alert>);
+
+                // Reset data
+                setRepair(prevRepair => ({
+                    ...prevRepair,
+                    repairmentId: shortUUID.generate(),
+                    equipmentId: [''],
+                    repairReason: "",
+                    repairPhoto: "next.svg",
+                    repairStatus: 0,
+                    equipmentCategory: '',
+                    submitTime: `${format(newDate, "M/d/yyyy")} ${Timestamp.fromDate(new Date()).toDate().toTimeString().slice(0, 5)}`,
+                    doneTime: "",
+                }));
+                setEquipmentName([]);
+                setQueryCategory('');
+                setFileInputKey((prevKey) => prevKey === 'fileInputKey' ? 'fileInputKey2' : 'fileInputKey');
+                setStatus(false);
+            }
+            else {
+                setMessage(<Alert severity="error">報修失敗，請再重新填寫並上傳</Alert>);
+            }
         }
     }
 
@@ -376,8 +384,8 @@ export default function Repairment() {
                                 <TextField type="text" multiline name="repairReason" style={{ width: '100%', marginTop: '10px' }} value={editVisible ? editRepair.repairReason : repair.repairReason}
                                     label="器材報修原因" onChange={handleChange} />
                                 <div>
-                                    <p style={{lineHeight: "40px", marginLeft: "14.5px"}}>請上傳報修照片：</p>
-                                    <TextField key={fileInputKey} type="file" style={{ width: '100%',marginBottom: "10px" }} inputProps={{ accept: 'image/x-png,image/jpeg' }} onChange={handleUpload} />
+                                    <p>請上傳報修照片：</p>
+                                    <TextField key={fileInputKey} type="file" style={{ width: '100%', }} inputProps={{ accept: 'image/x-png,image/jpeg' }} onChange={handleUpload} />
                                 </div>
                                 {isAddLoading ? <CircularProgress /> : ''}
                                 {status &&
@@ -409,13 +417,6 @@ export default function Repairment() {
                         <Box sx={{ mb: 1, display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
                             <Typography variant="h6">報修紀錄</Typography>
                             <Alert severity="info">可點擊報修單編號查看詳情</Alert>
-                            {/* <div>
-                                <Tooltip title="刪除報修資料">
-                                    <IconButton onClick={handleDeleteClick}>
-                                        <DeleteIcon />
-                                    </IconButton>
-                                </Tooltip>
-                            </div> */}
                         </Box>
                         {isLoading ? <CircularProgress /> :
                             <ThemeProvider theme={theme}>
@@ -428,15 +429,6 @@ export default function Repairment() {
                                             paginationModel: { page: 0, pageSize: 5 },
                                         },
                                     }}
-                                    // checkboxSelection
-                                    // onRowSelectionModelChange={(ids) => {
-                                    //     const selectedIDs = new Set(ids);
-                                    //     const selectedRows = rows.filter((row) =>
-                                    //         selectedIDs.has(row.id),
-                                    //     );
-
-                                    //     setSelectedRows(selectedRows);
-                                    // }}
                                     disableColumnMenu
                                 />
                             </ThemeProvider>
@@ -448,10 +440,9 @@ export default function Repairment() {
                                     <br />
                                     <TextField label="報修單編號" variant="outlined" name="id" value={viewRepairment.id} /><p />
                                     <br />
-                                    {/* <TextField label="報修器材種類" variant="outlined" name="equipmentId" value={viewRepairment.equipmentId} /><p />
-                                    <br /> */}
                                     <TextField label="報修器材種類" variant="outlined" name="equipmentId" value={viewRepairment.equipmentCategory} /><p />
                                     <br />
+                                    <EquipmentSelectChip viewRepairment={viewRepairment.equipmentId} equipment={equipment} />
                                     <TextField label="報修原因" variant="outlined" name="repairReason" value={viewRepairment.repairReason} /><p />
                                     <br />
                                     <TextField label="報修狀態" variant="outlined" name="repairmentStatus" value={viewRepairment.repairStatus} /><p />
