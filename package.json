@@ -35,6 +35,10 @@
     "react-chartjs-2": "^5.2.0",
     "react-dom": "18.2.0",
     "short-uuid": "^4.2.2",
-    "typescript": "5.2.2"
+    "typescript": "5.2.2",
+    "uuid": "^9.0.1"
+  },
+  "devDependencies": {
+    "@types/uuid": "^9.0.7"
   }
 }
