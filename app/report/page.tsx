@@ -11,8 +11,8 @@ export default function Home() {
             <ChartData />
             <br/><hr/><br/>
             <RentData />
-            <br/><hr/><br/>
-            <CountData />
+            {/* <br/><hr/><br/>
+            <CountData /> */}
             <br/><hr/><br/>
             <EnhancedTable />
         </div>

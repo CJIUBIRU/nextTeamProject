@@ -43,8 +43,8 @@ import useCategory from "../category/useCategory";
 import { Period } from "../_settings/interfaces";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
-// import { DatePicker } from '@mui/x-date-pickers/DatePicker'; //修改
-import { DatePicker } from "@mui/lab";
+import { DatePicker } from '@mui/x-date-pickers/DatePicker'; //修改
+// import { DatePicker } from "@mui/lab";
 import { format } from "date-fns";
 import getRentId from "../equipment/getRentId";
 import changeStatus from "../equipment/changeStatus";
@@ -364,8 +364,8 @@ export default function SelectedListItem() {
                       readOnly
                       value={date}
                       onChange={() => setnewDate(newDate)}
-                      // renderInput={(params) => <TextField {...params} />} //修改
-                      renderInput={(params: React.JSX.IntrinsicAttributes & { variant?: TextFieldVariants | undefined; } & Omit<OutlinedTextFieldProps | FilledTextFieldProps | StandardTextFieldProps, "variant">) => <TextField {...params} />} //修改
+                      renderInput={(params) => <TextField {...params} />} //修改
+                      // renderInput={(params: React.JSX.IntrinsicAttributes & { variant?: TextFieldVariants | undefined; } & Omit<OutlinedTextFieldProps | FilledTextFieldProps | StandardTextFieldProps, "variant">) => <TextField {...params} />} //修改
                     />
                   </LocalizationProvider>
                   <TextField
